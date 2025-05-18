@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kyystudytime</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      animation: gradientBackground 15s ease infinite;
+      background: linear-gradient(-45deg, #1e3c72, #2a5298, #6dd5ed, #2193b0);
+      background-size: 400% 400%;
+      text-align: center;
+    }
+
+    @keyframes gradientBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .title {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      animation: slideDown 1s ease-out forwards;
+      opacity: 0;
+      text-shadow: 0 0 10px #fff, 0 0 20px #00f0ff;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    #timer {
+      font-size: 64px;
+      margin-bottom: 30px;
+      animation: appear 0.8s ease-out forwards, glow 2s ease-in-out infinite alternate;
+      opacity: 0;
+      text-shadow: 0 0 10px #ffffff;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff; }
+      to   { text-shadow: 0 0 20px #fff, 0 0 30px #00f0ff; }
+    }
+
+    @keyframes appear {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .buttons button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .buttons button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .start { background-color: #2ecc71; color: white; }
+    .pause { background-color: #f1c40f; color: black; }
+    .reset { background-color: #e74c3c; color: white; }
+  </style>
+</head>
+<body>
+
+  <div class="title">Study Time</div>
+
+  <div id="timer">00:00:00</div>
+
+  <div class="buttons">
+    <button class="start" onclick="startTimer()">Start</button>
+    <button class="pause" onclick="pauseTimer()">Pause</button>
+    <button class="reset" onclick="resetTimer()">Reset</button>
+  </div>
+
+  <script>
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+    let timerInterval;
+    let isRunning = false;
+
+    function updateDisplay() {
+      const format = (num) => num.toString().padStart(2, "0");
+      document.getElementById("timer").textContent = 
+        `${format(hours)}:${format(minutes)}:${format(seconds)}`;
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+      isRunning = true;
+      timerInterval = setInterval(() => {
+        seconds++;
+        if (seconds === 60) {
+          seconds = 0;
+          minutes++;
+        }
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
+        }
+        updateDisplay();
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      seconds = 0;
+      minutes = 0;
+      hours = 0;
+      isRunning = false;
+      updateDisplay();
+    }
+
+    updateDisplay();
+  </script>
+
+</body>
+</html>
